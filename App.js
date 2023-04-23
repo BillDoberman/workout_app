@@ -1,14 +1,24 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import NavBar from './components/NavBar';
 
-export default function App() {
+const App = () => {
+  const [text, setText] = useState('Click me!');
+
+  const handlePress = () => {
+    setText('Button pressed!');
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <NavBar></NavBar>
+      <Button title={text} onPress={handlePress} />
     </View>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
