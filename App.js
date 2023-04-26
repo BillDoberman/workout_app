@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import NavBar from './components/NavBar';
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Workout from './components/Workout';
+import Home from './components/Home';
+import { StyleSheet } from 'react-native';
+import { Button } from 'react-native';
 
-const App = () => {
-  const [text, setText] = useState('Click me!');
+const Stack = createNativeStackNavigator();
 
-  const handlePress = () => {
-    setText('Button pressed!');
-  };
-
+const MyStack = () => {
   return (
-    <View style={styles.container}>
-      <NavBar></NavBar>
-      <Button title={text} onPress={handlePress} />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{title: 'Welcome'}}
+        />
+        <Stack.Screen name="Workout" component={Workout} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-export default App;
+export default MyStack;
 
 const styles = StyleSheet.create({
   container: {
