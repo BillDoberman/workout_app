@@ -3,8 +3,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Workout from './components/Workout';
 import Home from './components/Home';
-import { StyleSheet } from 'react-native';
-import { Button } from 'react-native';
+import { StyleSheet, Button } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const Stack = createNativeStackNavigator();
 
