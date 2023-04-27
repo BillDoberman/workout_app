@@ -16,9 +16,13 @@ const MyStack = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{title: 'Welcome'}}
+          options={{title: 'Workout App', headerTitleAlign: 'center'}}
         />
-        <Stack.Screen name="Workout" component={Workout} />
+        <Stack.Screen 
+          name="Workout" 
+          component={Workout}
+          options={{title: 'Workout App', headerTitleAlign: 'center'}} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
