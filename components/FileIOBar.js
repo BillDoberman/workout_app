@@ -6,13 +6,14 @@ import { StyleSheet, View, Button } from 'react-native';
 const DATA_FILENAME = "data.json"
 //#region data library defaults
 export var default_data_library = {
-  exercise_types: {
+  "exercise_types": {
     "bench press": ["chest", "arms"],
     "curls": ["arms"],
     "squat": ["legs"],
-    "deadlift": ["legs", "back"]},
-  body_parts: ["arms", "legs", "chest", "back"],
-  workouts: {}
+    "deadlift": ["legs", "back"]
+  },
+  "body_parts": ["arms", "legs", "chest", "back"],
+  "workouts": {}
 }
 //#endregion
 
@@ -43,6 +44,7 @@ const checkFileSystem = async () => {
   }
 };
 
+/*
 export const readDataFromFileOld = async(file_uri) => {
 
   myJsonObj = {}
@@ -51,7 +53,7 @@ export const readDataFromFileOld = async(file_uri) => {
     .then(() => FileSystem.readAsStringAsync(file_uri, { encoding: FileSystem.EncodingType.UTF8 } ))
     .then(value => { 
       myJsonObj = JSON.parse(value)
-      console.log(myJsonObj)
+      console.log("loaded from file ", myJsonObj)
     }).catch(error => {
       console.log("error reading " + error)
       myJsonObj = default_data_library
@@ -59,6 +61,7 @@ export const readDataFromFileOld = async(file_uri) => {
   
     return myJsonObj
 }
+*/
 
 export const readDataFromFile = async(file_uri) => {
 
@@ -66,7 +69,10 @@ export const readDataFromFile = async(file_uri) => {
 
   try {
     myJsonObj = await FileSystem.readAsStringAsync(file_uri, { encoding: FileSystem.EncodingType.UTF8 } )
+    console.log("loading from file")
+    myJsonObj = JSON.parse(myJsonObj)
   } catch(error) {
+    console.log("loading default data lib")
     myJsonObj = default_data_library
   }
 
@@ -89,6 +95,7 @@ const DeleteFile = async(file_uri) => {
 const writeDataToFile = async(fileUri, json_object) => {
 
   const json_string = JSON.stringify(json_object)
+  console.log(json_string) 
   checkFileExists(fileUri)
   .then(() => FileSystem.writeAsStringAsync(fileUri, json_string))
   .then(()=> console.log("write success"))
@@ -97,7 +104,6 @@ const writeDataToFile = async(fileUri, json_object) => {
 }
 
 function FileIOBar({ navigation }) {
-  data_to_write = { hello: "world 2 electric bugaloo0" }
   const file_uri = `${FileSystem.documentDirectory}${DATA_FILENAME}`;
 
   return (
@@ -109,7 +115,7 @@ function FileIOBar({ navigation }) {
           />
         </View>
       <View style = {styles.file_system_buttons}>
-        <Button color="dodgerblue" onPress={() => writeDataToFile(file_uri, data_to_write)}
+        <Button color="dodgerblue" onPress={() => writeDataToFile(file_uri, default_data_library)}
           title="write"
         />
       </View>

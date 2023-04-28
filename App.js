@@ -14,7 +14,7 @@ function MyStack() {
 
   const [data_library, setDataLibrary] = useState(default_data_library)
   const [content, setContent] = useState(null)
-  //const [exercise_options, setExercises] = useState([])
+  const [exercise_options, setExercises] = useState([])
 
   initContent = () => {
     setContent(
@@ -28,7 +28,7 @@ function MyStack() {
             name="Workout" 
             component={Workout}
             options={{title: 'Workout App', headerTitleAlign: 'center'}}
-            initialParams={{data_library}}
+            initialParams={{exercise_options}}
           />
         </Stack.Navigator>
     )
@@ -39,7 +39,10 @@ function MyStack() {
       const result = await readDataFromFile(getDataFileName())
       setDataLibrary(result)
       console.log("loaded data_library ", data_library)
-      //setExercises(result["body_parts"])
+      setExercises(Object.keys((result)["exercise_types"]))
+      //console.log(Object.keys((result)["exercise_types"]))
+      console.log("exercise options", exercise_options)
+      
       initContent()
     }
 
@@ -49,7 +52,6 @@ function MyStack() {
   return (
     <NavigationContainer>
       {content}
-      <Button title='print data' onPress={() => {console.log(data_library)}} />
     </NavigationContainer>
   );
 };

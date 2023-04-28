@@ -12,10 +12,10 @@ function Workout({ route }) {
   const [date, setDate] = useState(readableDate)
   const [exercises, setExercises] = useState([])
 
-  data_lib = route.params.data_library
+  exercise_types = route.params.exercise_options
+  console.log("in workout.js exercise_options is ", exercise_types)
 
   const addExercise = () => {
-    exercise_types = Object.keys(data_lib.exercise_types)
     const newExercise = <Exercise exercise_options={exercise_types} key={exercises.length + 1}/>
     setExercises([...exercises, newExercise])
   }

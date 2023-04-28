@@ -6,17 +6,18 @@ import SelectDropdown from 'react-native-select-dropdown';
 
 function ExerciseSet({ navigation, exercise_options, set_number }) {
   const [weight, setWeight] = useState("0")
+  const [old_input_value, setOldInputValue] = useState("0")
   const [reps, setReps] = useState("0")
   const inputRef = useRef(null)
 
-  const handleFocus = () => {
-    inputRef.current?.setNativeProps({selection: { start: 0, end: inputRef.current?.value?.length }})
+  const handleWeightFocus = () => {
+    setWeight("")
   }
 
   const validateWeight = () => {
     let value = parseFloat(weight)
     if (isNaN(value)) {
-      setWeight("0")
+      setWeight(old_input_value)
     } else {
       setWeight(Math.abs(value).toString())
     }
@@ -25,7 +26,7 @@ function ExerciseSet({ navigation, exercise_options, set_number }) {
   const validateReps = () => {
     let value = parseInt(reps)
     if (isNaN(value)) {
-      setReps("0")
+      setReps(old_input_value)
     } else {
       setReps(Math.abs(value).toString())
     }
@@ -44,7 +45,10 @@ function ExerciseSet({ navigation, exercise_options, set_number }) {
         onChangeText={setWeight}
         onEndEditing={validateWeight}
         onSubmitEditing={validateWeight}
-        onFocus={handleFocus}
+        onFocus={() => {
+          setOldInputValue(weight)
+          setWeight("")
+        }}
       />
       <Text style={styles.text}>reps</Text>
       <TextInput 
@@ -55,6 +59,10 @@ function ExerciseSet({ navigation, exercise_options, set_number }) {
         onChangeText={setReps}
         onEndEditing={validateReps}
         onSubmitEditing={validateReps}
+        onFocus={() => {
+          setOldInputValue(reps)
+          setReps("")
+        }}
       />
     </View>
   );
