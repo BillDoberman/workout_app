@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as FileSystem from 'expo-file-system'
 import { StyleSheet, View, Button, ScrollView, Text } from 'react-native';
 import FileIOBar from './FileIOBar'
+import { saveDataLibrary } from './FileIOBar';
 import Exercise from './Exercise';
 
 function Workout({ route }) {
@@ -13,7 +14,8 @@ function Workout({ route }) {
   const [exercises, setExercises] = useState([])
 
   exercise_types = Object.keys(route.params.data_library["exercise_types"])
-  console.log("in workout.js exercise_options is ", exercise_types)
+  //route.params.data_library["workouts"]["camo"] = "file"
+  //saveDataLibrary(route.params.data_library)
 
   const addExercise = () => {
     const newExercise = <Exercise exercise_options={exercise_types} key={exercises.length + 1}/>

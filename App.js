@@ -38,10 +38,7 @@ function MyStack() {
     const fetchData = async () => {
       const result = await readDataFromFile(getDataFileName())
       setDataLibrary(result)
-      console.log("loaded data_library ", data_library)
-      //setExercises(Object.keys((result)["exercise_types"]))
-      //console.log(Object.keys((result)["exercise_types"]))
-      //console.log("exercise options", exercise_options)
+      console.log("loaded data_library ", {data_library})
       
       initContent()
     }

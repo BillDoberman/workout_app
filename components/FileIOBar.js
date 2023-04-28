@@ -92,6 +92,9 @@ const DeleteFile = async(file_uri) => {
     .catch(error => console.log("error deleting " + error))
 }
 
+export const saveDataLibrary = (json_object) => {
+  writeDataToFile(getDataFileName(), json_object)
+}
 
 const writeDataToFile = async(fileUri, json_object) => {
 
