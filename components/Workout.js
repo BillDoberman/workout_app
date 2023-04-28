@@ -6,13 +6,13 @@ import FileIOBar from './FileIOBar'
 import Exercise from './Exercise';
 
 function Workout({ route }) {
-  const filio_bar = false ? <FileIOBar /> : null;
+  const filio_bar = true ? <FileIOBar /> : null;
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const readableDate = new Date().toLocaleDateString('en-US', options);
   const [date, setDate] = useState(readableDate)
   const [exercises, setExercises] = useState([])
 
-  exercise_types = route.params.exercise_options
+  exercise_types = Object.keys(route.params.data_library["exercise_types"])
   console.log("in workout.js exercise_options is ", exercise_types)
 
   const addExercise = () => {

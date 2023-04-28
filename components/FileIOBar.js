@@ -72,7 +72,8 @@ export const readDataFromFile = async(file_uri) => {
     console.log("loading from file")
     myJsonObj = JSON.parse(myJsonObj)
   } catch(error) {
-    console.log("loading default data lib")
+    console.log("loading default data lib and writing data to file")
+    writeDataToFile(file_uri, default_data_library)
     myJsonObj = default_data_library
   }
 
