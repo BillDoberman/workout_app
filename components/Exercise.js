@@ -10,7 +10,7 @@ function Exercise({ navigation, exercise_options }) {
   const [saved_sets, setExerciseSets] = useState([])
 
   const addSet = () => {
-    let newSet = <ExerciseSet set_number={saved_sets.length + 1}/>
+    let newSet = <ExerciseSet key={saved_sets.length} set_number={saved_sets.length + 1}/>
     setExerciseSets([...saved_sets, newSet])
   }
 

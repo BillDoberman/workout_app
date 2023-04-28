@@ -13,27 +13,43 @@ const Stack = createNativeStackNavigator();
 function MyStack() {
 
   const [data_library, setDataLibrary] = useState(default_data_library)
+  const [content, setContent] = useState(null)
+  //const [exercise_options, setExercises] = useState([])
+
+  initContent = () => {
+    setContent(
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{title: 'Workout App', headerTitleAlign: 'center'}}
+          />
+          <Stack.Screen 
+            name="Workout" 
+            component={Workout}
+            options={{title: 'Workout App', headerTitleAlign: 'center'}}
+            initialParams={{data_library}}
+          />
+        </Stack.Navigator>
+    )
+  }
 
   useEffect(() => {
-    readDataFromFile(getDataFileName())
-      .then(response => setDataLibrary(response))
-      .catch(error => console.error("error loading data library " + error))
+    const fetchData = async () => {
+      const result = await readDataFromFile(getDataFileName())
+      setDataLibrary(result)
+      console.log("loaded data_library ", data_library)
+      //setExercises(result["body_parts"])
+      initContent()
+    }
+
+    fetchData();
   }, []);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{title: 'Workout App', headerTitleAlign: 'center'}}
-        />
-        <Stack.Screen 
-          name="Workout" 
-          component={Workout}
-          options={{title: 'Workout App', headerTitleAlign: 'center'}} 
-        />
-      </Stack.Navigator>
+      {content}
+      <Button title='print data' onPress={() => {console.log(data_library)}} />
     </NavigationContainer>
   );
 };

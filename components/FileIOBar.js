@@ -8,6 +8,7 @@ const DATA_FILENAME = "data.json"
 export var default_data_library = {
   exercise_types: {
     "bench press": ["chest", "arms"],
+    "curls": ["arms"],
     "squat": ["legs"],
     "deadlift": ["legs", "back"]},
   body_parts: ["arms", "legs", "chest", "back"],
@@ -42,7 +43,7 @@ const checkFileSystem = async () => {
   }
 };
 
-export const readDataFromFile = async(file_uri) => {
+export const readDataFromFileOld = async(file_uri) => {
 
   myJsonObj = {}
 
@@ -57,6 +58,19 @@ export const readDataFromFile = async(file_uri) => {
     })
   
     return myJsonObj
+}
+
+export const readDataFromFile = async(file_uri) => {
+
+  let myJsonObj = {}
+
+  try {
+    myJsonObj = await FileSystem.readAsStringAsync(file_uri, { encoding: FileSystem.EncodingType.UTF8 } )
+  } catch(error) {
+    myJsonObj = default_data_library
+  }
+
+  return myJsonObj
 }
 
 export const getDataFileName = () => {
