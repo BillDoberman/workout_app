@@ -6,14 +6,14 @@ import FileIOBar from './FileIOBar'
 import Exercise from './Exercise';
 
 function Workout({ navigation }) {
+  const filio_bar = false ? <FileIOBar /> : null;
+
   const [exercises, setExercises] = useState([])
 
   const addExercise = () => {
-    const newExercise = <Exercise key={exercises.length + 1}/>
+    const newExercise = <Exercise exercise_options={["bench", "squat", "deadlift"]} key={exercises.length + 1}/>
     setExercises([...exercises, newExercise])
   }
-
-  const filio_bar = true ? <FileIOBar /> : null;
 
   return (
     <View style={styles.main_view}>
