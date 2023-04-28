@@ -4,6 +4,16 @@ import * as FileSystem from 'expo-file-system'
 import { StyleSheet, View, Button } from 'react-native';
 
 const DATA_FILENAME = "data.json"
+//#region data library defaults
+export var default_data_library = {
+  exercise_types: {
+    "bench press": ["chest", "arms"],
+    "squat": ["legs"],
+    "deadlift": ["legs", "back"]},
+  body_parts: ["arms", "legs", "chest", "back"],
+  workouts: {}
+}
+//#endregion
 
 const createDataFile = async (fileUri, content) => {
   try {
@@ -32,7 +42,7 @@ const checkFileSystem = async () => {
   }
 };
 
-const readDataFromFile = async(file_uri) => {
+export const readDataFromFile = async(file_uri) => {
 
   myJsonObj = {}
 
@@ -41,9 +51,16 @@ const readDataFromFile = async(file_uri) => {
     .then(value => { 
       myJsonObj = JSON.parse(value)
       console.log(myJsonObj)
-    }).catch(error => console.log("error reading " + error))
+    }).catch(error => {
+      console.log("error reading " + error)
+      myJsonObj = default_data_library
+    })
   
     return myJsonObj
+}
+
+export const getDataFileName = () => {
+  return `${FileSystem.documentDirectory}${DATA_FILENAME}`;
 }
 
 const DeleteFile = async(file_uri) => {

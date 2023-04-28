@@ -5,7 +5,7 @@ import { StyleSheet, View, Button, Text } from 'react-native';
 
 function Exercise({ navigation }) {
   return (
-    <View >
+    <View style={styles.exercise_view}>
       <Text>hello</Text>
     </View>
   );
@@ -14,15 +14,10 @@ function Exercise({ navigation }) {
 export default Exercise;
 
 const styles = StyleSheet.create({
-  file_system_button_bar: {
+  exercise_view: {
     flex: 1,
-    maxHeight: 40,
+    height: 100,
     justifyContent: 'center',
     flexDirection: 'row',
-    backgroundColor: 'tomato'
   },
-
-  file_system_buttons: {
-    flex: 1,
-  }
 });

@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as FileSystem from 'expo-file-system'
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Button, ScrollView } from 'react-native';
 import FileIOBar from './FileIOBar'
 import Exercise from './Exercise';
 
@@ -13,11 +13,15 @@ function Workout({ navigation }) {
     setExercises([...exercises, newExercise])
   }
 
+  const filio_bar = true ? <FileIOBar /> : null;
+
   return (
     <View style={styles.main_view}>
-      <FileIOBar />
-      {exercises}
-      <Button title='+ exercise' onPress={addExercise}/>
+      {filio_bar}
+      <ScrollView style={styles.scrollview} contentContainerStyle={{flexGrow: 1, width: '100%'}}>
+        {exercises}
+        <Button title='+ exercise' onPress={addExercise}/>
+      </ScrollView>
     </View>    
   );
 }
@@ -29,6 +33,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    alignItems: 'center'
+  },
+
+  scrollview: {
+    flex: 1,
+    backgroundColor: 'white',
   }
 });
