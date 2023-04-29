@@ -1,18 +1,20 @@
-import { React, useState, useRef } from 'react';
+import { React, useState, useRef, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as FileSystem from 'expo-file-system'
 import { StyleSheet, View, Button, Text, Picker, TextInput } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-function ExerciseSet({ navigation, exercise_options, set_number }) {
+function ExerciseSet({ set_number, loaded_set }) {
   const [weight, setWeight] = useState("0")
-  const [old_input_value, setOldInputValue] = useState("0")
   const [reps, setReps] = useState("0")
-  const inputRef = useRef(null)
+  const [old_input_value, setOldInputValue] = useState("0")
 
-  const handleWeightFocus = () => {
-    setWeight("")
-  }
+  useEffect(() => {
+    if (loaded_set) {
+      setWeight(loaded_set.weight)
+      setReps(loaded_set.reps)
+    }
+  }, []);
 
   const validateWeight = () => {
     let value = parseFloat(weight)
@@ -37,7 +39,6 @@ function ExerciseSet({ navigation, exercise_options, set_number }) {
       <Text style={styles.set_number}>#{set_number}</Text>
       <Text style={styles.text}>weight</Text>
       <TextInput
-        ref={inputRef}
         value={weight} 
         selectionColor={'dodgerblue'}
         style = {styles.text_input}

@@ -1,4 +1,4 @@
-import { React, useRef, useState } from 'react';
+import { React, useRef, useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as FileSystem from 'expo-file-system'
 import { StyleSheet, View, Button, ScrollView, Text } from 'react-native';
@@ -6,21 +6,42 @@ import FileIOBar from './FileIOBar'
 import { saveDataLibrary } from './FileIOBar';
 import Exercise from './Exercise';
 
-function Workout({ route }) {
-  const filio_bar = true ? <FileIOBar /> : null;
+function getReadableDate() {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const readableDate = new Date().toLocaleDateString('en-US', options);
-  const [date, setDate] = useState(readableDate)
+  return readableDate;
+}
+
+function Workout({ route }) {
+  const filio_bar = true ? <FileIOBar /> : null;
+  const [date, setDate] = useState(getReadableDate())
   const [exercises, setExercises] = useState([])
 
-  exercise_types = Object.keys(route.params.data_library["exercise_types"])
-  //route.params.data_library["workouts"]["camo"] = "file"
-  //saveDataLibrary(route.params.data_library)
+  const exercise_types = Object.keys(route.params.data_library["exercise_types"])
 
   const addExercise = () => {
     const newExercise = <Exercise exercise_options={exercise_types} key={exercises.length + 1}/>
     setExercises([...exercises, newExercise])
   }
+
+  const loadWorkout = (workout_data) => {
+    let new_exercises = []
+    for (i = 0; i < workout_data.exercises.length; i++) {
+      new_exercises.push(<Exercise 
+        loaded_exercise={workout_data.exercises[i]} 
+        exercise_options={exercise_types} 
+        key={new_exercises.length + 1}/>)
+    }
+    setExercises(new_exercises)
+  }
+
+  useEffect(() => {
+    let workout_data = route.params.data_library["workouts"][date]
+
+    if (workout_data) {
+      loadWorkout(workout_data)
+    }
+  }, []);
 
   return (
     <View style={styles.main_view}>

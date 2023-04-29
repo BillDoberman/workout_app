@@ -13,7 +13,14 @@ export var default_data_library = {
     "deadlift": ["legs", "back"]
   },
   "body_parts": ["arms", "legs", "chest", "back"],
-  "workouts": {}
+  "workouts": {"Friday, April 28, 2023": 
+    {"exercises": [
+      {"type": "bench press", 
+      "sets": [{"weight" : "135", "reps": "10"},
+                {"weight" : "225", "reps": "5"}]}, 
+      {"type": "squat", 
+        "sets": [{"weight" : "275", "reps": "5"},
+                  {"weight" : "315", "reps": "2"}]}]}}
 }
 //#endregion
 

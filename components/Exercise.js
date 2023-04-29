@@ -1,16 +1,20 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as FileSystem from 'expo-file-system'
 import { StyleSheet, View, Button, Text, Picker } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import ExerciseSet from './ExerciseSet';
 
-function Exercise({ navigation, exercise_options }) {
+function Exercise({ navigation, exercise_options, loaded_exercise }) {
 
   const [saved_sets, setExerciseSets] = useState([])
+  const [default_exercise_type, setExerciseType] = useState("squat")
 
   const addSet = () => {
-    let newSet = <ExerciseSet key={saved_sets.length} set_number={saved_sets.length + 1}/>
+    let newSet = <ExerciseSet 
+      key={saved_sets.length} 
+      set_number={saved_sets.length + 1}
+    />
     setExerciseSets([...saved_sets, newSet])
   }
 
@@ -19,13 +23,28 @@ function Exercise({ navigation, exercise_options }) {
     setExerciseSets(new_saved_sets)
   }
 
+  useEffect(() => {
+    if (loaded_exercise) {
+      let newSets = []
+      for (i = 0; i < loaded_exercise.sets.length; i++) {
+        newSets.push(<ExerciseSet 
+          key={newSets.length} 
+          set_number={newSets.length + 1}
+          loaded_set={loaded_exercise.sets[i]}
+          />)
+      }
+      setExerciseType(loaded_exercise.type)
+      setExerciseSets(newSets)
+    }
+  }, []);
+
   return (
     <View style={styles.exercise_view}>
       <View style={{flexDirection: 'row'}}>
         <Button title="  -  set " onPress={removeSet} />
         <SelectDropdown
           data={ exercise_options }
-          defaultValueByIndex={0}
+          defaultValue={default_exercise_type}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index)
           }}
