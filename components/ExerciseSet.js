@@ -4,7 +4,7 @@ import * as FileSystem from 'expo-file-system'
 import { StyleSheet, View, Button, Text, Picker, TextInput } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-function ExerciseSet({ set_number, loaded_set }) {
+function ExerciseSet({ set_index, loaded_set, modify_value }) {
   const [weight, setWeight] = useState("0")
   const [reps, setReps] = useState("0")
   const [old_input_value, setOldInputValue] = useState("0")
@@ -13,6 +13,8 @@ function ExerciseSet({ set_number, loaded_set }) {
     if (loaded_set) {
       setWeight(loaded_set.weight)
       setReps(loaded_set.reps)
+      modify_value(set_index, "weight", loaded_set.weight)
+      modify_value(set_index, "reps", loaded_set.reps)
     }
   }, []);
 
@@ -21,7 +23,9 @@ function ExerciseSet({ set_number, loaded_set }) {
     if (isNaN(value)) {
       setWeight(old_input_value)
     } else {
-      setWeight(Math.abs(value).toString())
+      let new_weight_value = Math.abs(value).toString()
+      setWeight(new_weight_value)
+      modify_value(set_index, "weight", new_weight_value)
     }
   }
 
@@ -30,13 +34,15 @@ function ExerciseSet({ set_number, loaded_set }) {
     if (isNaN(value)) {
       setReps(old_input_value)
     } else {
-      setReps(Math.abs(value).toString())
+      let new_reps_value = Math.abs(value).toString()
+      setReps(new_reps_value)
+      modify_value(set_index, "reps", new_reps_value)
     }
   }
   
   return (
     <View style={styles.exercise_set}>
-      <Text style={styles.set_number}>#{set_number}</Text>
+      <Text style={styles.set_index}>#{set_index + 1}</Text>
       <Text style={styles.text}>weight</Text>
       <TextInput
         value={weight} 
@@ -92,9 +98,10 @@ const styles = StyleSheet.create({
     textAlign: 'center'    
   },
 
-  set_number: {
+  set_index: {
     flex: 0.2,
     fontSize: 15,
-    textAlign: 'center'    
+    textAlign: 'center',
+    color: "gray"   
   }
 });

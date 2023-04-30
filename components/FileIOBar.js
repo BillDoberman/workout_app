@@ -5,6 +5,24 @@ import { StyleSheet, View, Button } from 'react-native';
 
 const DATA_FILENAME = "data.json"
 //#region data library defaults
+/*export var default_data_library = {
+  "exercise_types": {
+    "bench press": ["chest", "arms"],
+    "curls": ["arms"],
+    "squat": ["legs"],
+    "deadlift": ["legs", "back"]
+  },
+  "body_parts": ["arms", "legs", "chest", "back"],
+  "workouts": {"Saturday, April 29, 2023": 
+    {"exercises": [
+      {"type": "bench press", 
+      "sets": [{"weight" : "135", "reps": "10"},
+                {"weight" : "225", "reps": "5"}]}, 
+      {"type": "squat", 
+        "sets": [{"weight" : "275", "reps": "5"},
+                  {"weight" : "315", "reps": "2"}]}]}}
+} */
+
 export var default_data_library = {
   "exercise_types": {
     "bench press": ["chest", "arms"],
@@ -13,14 +31,7 @@ export var default_data_library = {
     "deadlift": ["legs", "back"]
   },
   "body_parts": ["arms", "legs", "chest", "back"],
-  "workouts": {"Friday, April 28, 2023": 
-    {"exercises": [
-      {"type": "bench press", 
-      "sets": [{"weight" : "135", "reps": "10"},
-                {"weight" : "225", "reps": "5"}]}, 
-      {"type": "squat", 
-        "sets": [{"weight" : "275", "reps": "5"},
-                  {"weight" : "315", "reps": "2"}]}]}}
+  "workouts": {}
 }
 //#endregion
 
@@ -106,7 +117,6 @@ export const saveDataLibrary = (json_object) => {
 const writeDataToFile = async(fileUri, json_object) => {
 
   const json_string = JSON.stringify(json_object)
-  console.log(json_string) 
   checkFileExists(fileUri)
   .then(() => FileSystem.writeAsStringAsync(fileUri, json_string))
   .then(()=> console.log("write success"))

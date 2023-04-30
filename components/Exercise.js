@@ -5,33 +5,48 @@ import { StyleSheet, View, Button, Text, Picker } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import ExerciseSet from './ExerciseSet';
 
-function Exercise({ navigation, exercise_options, loaded_exercise }) {
+function Exercise({ exercise_index, exercise_options, loaded_exercise, modify_value }) {
 
   const [saved_sets, setExerciseSets] = useState([])
   const [default_exercise_type, setExerciseType] = useState("squat")
 
   const addSet = () => {
-    let newSet = <ExerciseSet 
-      key={saved_sets.length} 
-      set_number={saved_sets.length + 1}
-    />
+    let newSet = newSetJSX(saved_sets.length)
     setExerciseSets([...saved_sets, newSet])
   }
 
   const removeSet = () => {
+    if (saved_sets.length > 0) {
+      modifyValue(-1, null, null)
+    }
     let new_saved_sets = saved_sets.slice(0, saved_sets.length - 1)
     setExerciseSets(new_saved_sets)
+  }
+
+  const modifyValue = (set_index, key, value) => {
+    modify_value(exercise_index, set_index, key, value)
+  }
+
+  const newSetJSX = (index) => {
+    load_this = { weight : "0", reps : "0" }
+    if (loaded_exercise) {
+      if (index < loaded_exercise.sets.length) {
+        load_this = loaded_exercise.sets[index] 
+      }
+    }
+    return <ExerciseSet 
+            key={index} 
+            set_index={index}
+            loaded_set={load_this}
+            modify_value={modifyValue}
+          />
   }
 
   useEffect(() => {
     if (loaded_exercise) {
       let newSets = []
       for (i = 0; i < loaded_exercise.sets.length; i++) {
-        newSets.push(<ExerciseSet 
-          key={newSets.length} 
-          set_number={newSets.length + 1}
-          loaded_set={loaded_exercise.sets[i]}
-          />)
+        newSets.push(newSetJSX(i))
       }
       setExerciseType(loaded_exercise.type)
       setExerciseSets(newSets)
@@ -46,7 +61,7 @@ function Exercise({ navigation, exercise_options, loaded_exercise }) {
           data={ exercise_options }
           defaultValue={default_exercise_type}
           onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index)
+            modify_value(exercise_index, "none", "type", selectedItem)
           }}
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
@@ -59,7 +74,7 @@ function Exercise({ navigation, exercise_options, loaded_exercise }) {
             return item
           }}
         />
-                <Button title="  +  set " onPress={addSet} />
+        <Button title="  +  set " onPress={addSet} />
       </View>
       { saved_sets }
     </View>

@@ -17,29 +17,42 @@ function Workout({ route }) {
   const [date, setDate] = useState(getReadableDate())
   const [exercises, setExercises] = useState([])
 
-  const exercise_types = Object.keys(route.params.data_library["exercise_types"])
+  const exercise_types = Object.keys(route.params.exercise_options)
 
   const addExercise = () => {
-    const newExercise = <Exercise exercise_options={exercise_types} key={exercises.length + 1}/>
+    const newExercise = createExerciseJSX(exercises.length, null)
     setExercises([...exercises, newExercise])
+  }
+
+  const createExerciseJSX = (index, workout_data) => {
+    let load_this = workout_data ? workout_data.exercises[index] : null
+    return <Exercise 
+      loaded_exercise={load_this}
+      exercise_options={exercise_types}
+      exercise_index={index}
+      modify_value={modify_value} 
+      key={index}/>
+  }
+
+  const modify_value = (exercise_index, set_index, key, value) => {
+    route.params.modifyValue(route.params.workout_date, exercise_index, set_index, key, value)
   }
 
   const loadWorkout = (workout_data) => {
     let new_exercises = []
     for (i = 0; i < workout_data.exercises.length; i++) {
-      new_exercises.push(<Exercise 
-        loaded_exercise={workout_data.exercises[i]} 
-        exercise_options={exercise_types} 
-        key={new_exercises.length + 1}/>)
+      new_exercises.push(createExerciseJSX(i, workout_data))
     }
     setExercises(new_exercises)
   }
 
   useEffect(() => {
-    let workout_data = route.params.data_library["workouts"][date]
+    let workout_data = route.params.current_workout
 
     if (workout_data) {
       loadWorkout(workout_data)
+    } else {
+      console.error("there should always be workout data passed in");
     }
   }, []);
 

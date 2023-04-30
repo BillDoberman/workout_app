@@ -1,0 +1,3 @@
+find the right time to save the data library, rather than every time something is modified
+make it so you can delete an exercise
+figure out how to not get an error passing functions in props
