@@ -53,9 +53,14 @@ function Exercise({ exercise_index, exercise_options, loaded_exercise, modify_va
     }
   }, []);
 
+  const deleteExercise = () => {
+    modify_value((exercise_index + 1) * -1, null, null, null)
+  }
+
   return (
     <View style={styles.exercise_view}>
       <View style={{flexDirection: 'row'}}>
+        <Button color='tomato' title=" delete " onPress={deleteExercise} />
         <Button title="  -  set " onPress={removeSet} />
         <SelectDropdown
           data={ exercise_options }

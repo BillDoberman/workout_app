@@ -49,7 +49,13 @@ function MyStack() {
       data_library["workouts"][workout_date]["exercises"].push({"sets" : [], "type": "squat"})
     }
 
-    if (set_index == "none") {
+    if (exercise_index < 0) { // delete exercise
+      let index_to_delete = Math.abs(exercise_index) - 1
+      data_library["workouts"][workout_date]["exercises"][index_to_delete] = ""
+      return
+    }
+
+    if (set_index == "none") { // set the type of exercise, or other keys
       data_library["workouts"][workout_date]["exercises"][exercise_index][key] = value
       saveDataLibrary(data_library)
       return
@@ -59,7 +65,7 @@ function MyStack() {
       data_library["workouts"][workout_date]["exercises"][exercise_index]["sets"].push({"weight" : 0, "reps" : 0})
     }
 
-    if (set_index < 0) {
+    if (set_index < 0) { // delete set
       data_library["workouts"][workout_date]["exercises"][exercise_index]["sets"].pop()
       saveDataLibrary(data_library)
       return

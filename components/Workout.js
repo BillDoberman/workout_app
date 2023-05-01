@@ -16,12 +16,16 @@ function Workout({ route }) {
   const filio_bar = true ? <FileIOBar /> : null;
   const [date, setDate] = useState(getReadableDate())
   const [exercises, setExercises] = useState([])
+  const exercisesRef = useRef(exercises)
 
   const exercise_types = Object.keys(route.params.exercise_options)
 
   const addExercise = () => {
     const newExercise = createExerciseJSX(exercises.length, null)
-    setExercises([...exercises, newExercise])
+    const newExercises = [...exercises, newExercise]
+    setExercises(newExercises)
+    exercisesRef.current = newExercises
+    console.log("added exercise ", newExercises)
   }
 
   const createExerciseJSX = (index, workout_data) => {
@@ -35,15 +39,29 @@ function Workout({ route }) {
   }
 
   const modify_value = (exercise_index, set_index, key, value) => {
+    if (exercise_index < 0) { // delete exercise
+      let index_to_delete = Math.abs(exercise_index) - 1
+      let newExercises = [...exercisesRef.current]
+      newExercises[index_to_delete] = null
+      setExercises(newExercises)
+      exercisesRef.current = newExercises
+      console.log("deleted exercise ", index_to_delete, newExercises)
+    }
+
     route.params.modifyValue(route.params.workout_date, exercise_index, set_index, key, value)
   }
 
   const loadWorkout = (workout_data) => {
     let new_exercises = []
     for (i = 0; i < workout_data.exercises.length; i++) {
-      new_exercises.push(createExerciseJSX(i, workout_data))
+      if (workout_data.exercises[i] == "") { // empty string is a deleted exercise
+        new_exercises.push(null)
+      } else {
+        new_exercises.push(createExerciseJSX(i, workout_data))
+      }
     }
     setExercises(new_exercises)
+    exercisesRef.current = new_exercises
   }
 
   useEffect(() => {
