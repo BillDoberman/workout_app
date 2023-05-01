@@ -13,11 +13,11 @@ function getReadableDate() {
 }
 
 function Workout({ route }) {
-  const filio_bar = true ? <FileIOBar /> : null;
+  const filio_bar = false ? <FileIOBar /> : null;
   const [date, setDate] = useState(getReadableDate())
   const [exercises, setExercises] = useState([])
   const exercisesRef = useRef(exercises)
-
+  const modify_callback = route.params
   const exercise_types = Object.keys(route.params.exercise_options)
 
   const addExercise = () => {
@@ -77,7 +77,11 @@ function Workout({ route }) {
   return (
     <View style={styles.main_view}>
       {filio_bar}
-      <Text style={styles.date_text}>{date}</Text>
+      <View style={styles.date_bar}>
+        <Button color={'gray'} title='  <  ' />
+        <Text style={styles.date_text}>{date}</Text>
+        <Button color={'gray'} title='  >  ' />
+      </View>
       <View style={{height:20, backgroundColor:'white'}}></View>
       <ScrollView style={styles.scrollview} contentContainerStyle={{flexGrow: 1, width: '100%'}}>
         {exercises}
@@ -111,5 +115,11 @@ const styles = StyleSheet.create({
     height: 50,
     alignSelf: 'center',
     top: 10
+  },
+
+  date_bar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+    //flex: 1
   }
 });

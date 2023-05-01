@@ -5,7 +5,7 @@ import { StyleSheet, View, Button } from 'react-native';
 
 const DATA_FILENAME = "data.json"
 //#region data library defaults
-/*export var default_data_library = {
+export var default_data_library = {
   "exercise_types": {
     "bench press": ["chest", "arms"],
     "curls": ["arms"],
@@ -21,9 +21,9 @@ const DATA_FILENAME = "data.json"
       {"type": "squat", 
         "sets": [{"weight" : "275", "reps": "5"},
                   {"weight" : "315", "reps": "2"}]}]}}
-} */
+} 
 
-export var default_data_library = {
+export var alt_default_data_library = {
   "exercise_types": {
     "bench press": ["chest", "arms"],
     "curls": ["arms"],
@@ -61,25 +61,6 @@ const checkFileSystem = async () => {
     return;
   }
 };
-
-/*
-export const readDataFromFileOld = async(file_uri) => {
-
-  myJsonObj = {}
-
-  checkFileExists(file_uri)
-    .then(() => FileSystem.readAsStringAsync(file_uri, { encoding: FileSystem.EncodingType.UTF8 } ))
-    .then(value => { 
-      myJsonObj = JSON.parse(value)
-      console.log("loaded from file ", myJsonObj)
-    }).catch(error => {
-      console.log("error reading " + error)
-      myJsonObj = default_data_library
-    })
-  
-    return myJsonObj
-}
-*/
 
 export const readDataFromFile = async(file_uri) => {
 

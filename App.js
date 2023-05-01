@@ -40,7 +40,7 @@ function MyStack() {
     fetchData();
   }, []);
 
-  const modifyValue = (workout_date, exercise_index, set_index, key, value) => {
+  const modifyMyValue = (workout_date, exercise_index, set_index, key, value) => {
     if (!data_library["workouts"][workout_date]) {
       data_library["workouts"][workout_date] = { exercises : [] }
     }
@@ -88,11 +88,12 @@ function MyStack() {
             name="Workout" 
             component={Workout}
             options={{title: 'Workout App', headerTitleAlign: 'center'}}
-            initialParams={{exercise_options, current_workout, workout_date, modifyValue : modifyValue}}
+            initialParams={{exercise_options, current_workout, workout_date, modifyValue : modifyMyValue}}
+            //initialParams={{exercise_options, current_workout, workout_date}}
           />
         </Stack.Navigator>) : 
         (<SafeAreaView style = {styles.loading}>
-          <Text style={{color:'white', fontSize: 50}}>loading...</Text>
+          <Text style={{color:'white', fontSize: 30}}>loading...</Text>
         </SafeAreaView>)}
     </NavigationContainer>
   );
