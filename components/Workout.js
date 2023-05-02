@@ -6,18 +6,12 @@ import FileIOBar from './FileIOBar'
 import { saveDataLibrary } from './FileIOBar';
 import Exercise from './Exercise';
 
-function getReadableDate() {
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const readableDate = new Date().toLocaleDateString('en-US', options);
-  return readableDate;
-}
-
-function Workout({ route }) {
+function Workout({ route, navigation }) {
+  const date = route.params.workout_date
+  console.log("workout function called", date)
   const filio_bar = false ? <FileIOBar /> : null;
-  const [date, setDate] = useState(getReadableDate())
   const [exercises, setExercises] = useState([])
   const exercisesRef = useRef(exercises)
-  const modify_callback = route.params
   const exercise_types = Object.keys(route.params.exercise_options)
 
   const addExercise = () => {
@@ -66,7 +60,7 @@ function Workout({ route }) {
 
   useEffect(() => {
     let workout_data = route.params.current_workout
-
+    console.log("render use effect")
     if (workout_data) {
       loadWorkout(workout_data)
     } else {
@@ -78,9 +72,9 @@ function Workout({ route }) {
     <View style={styles.main_view}>
       {filio_bar}
       <View style={styles.date_bar}>
-        <Button color={'gray'} title='  <  ' />
+        <Button color={'gray'} title='  <  ' onPress={() => route.params.changeWorkout(date, -1)}/>
         <Text style={styles.date_text}>{date}</Text>
-        <Button color={'gray'} title='  >  ' />
+        <Button color={'gray'} title='  >  ' onPress={() => route.params.changeWorkout(date, 1)}/>
       </View>
       <View style={{height:20, backgroundColor:'white'}}></View>
       <ScrollView style={styles.scrollview} contentContainerStyle={{flexGrow: 1, width: '100%'}}>

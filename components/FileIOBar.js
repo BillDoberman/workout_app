@@ -92,7 +92,7 @@ const DeleteFile = async(file_uri) => {
 }
 
 export const saveDataLibrary = (json_object) => {
-  writeDataToFile(getDataFileName(), json_object)
+ writeDataToFile(getDataFileName(), json_object)
 }
 
 const writeDataToFile = async(fileUri, json_object) => {
