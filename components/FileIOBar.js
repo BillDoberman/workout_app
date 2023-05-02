@@ -14,7 +14,8 @@ export var default_data_library = {
   },
   "body_parts": ["arms", "legs", "chest", "back"],
   "workouts": {"Saturday, April 29, 2023": 
-    {"exercises": [
+    {"notes":"",
+      "exercises": [
       {"type": "bench press", 
       "sets": [{"weight" : "135", "reps": "10"},
                 {"weight" : "225", "reps": "5"}]}, 

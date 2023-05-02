@@ -1,16 +1,13 @@
 import { React, useRef, useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import * as FileSystem from 'expo-file-system'
-import { StyleSheet, View, Button, ScrollView, Text } from 'react-native';
+import { StyleSheet, View, Button, ScrollView, Text, TextInput } from 'react-native';
 import FileIOBar from './FileIOBar'
-import { saveDataLibrary } from './FileIOBar';
 import Exercise from './Exercise';
 
 function Workout({ route, navigation }) {
   const date = route.params.workout_date
-  console.log("workout function called", date)
   const filio_bar = false ? <FileIOBar /> : null;
   const [exercises, setExercises] = useState([])
+  const [notes, setNotes] = useState(route.params.current_workout["notes"])
   const exercisesRef = useRef(exercises)
   const exercise_types = Object.keys(route.params.exercise_options)
 
@@ -19,7 +16,6 @@ function Workout({ route, navigation }) {
     const newExercises = [...exercises, newExercise]
     setExercises(newExercises)
     exercisesRef.current = newExercises
-    console.log("added exercise ", newExercises)
   }
 
   const createExerciseJSX = (index, workout_data) => {
@@ -39,7 +35,6 @@ function Workout({ route, navigation }) {
       newExercises[index_to_delete] = null
       setExercises(newExercises)
       exercisesRef.current = newExercises
-      console.log("deleted exercise ", index_to_delete, newExercises)
     }
 
     route.params.modifyValue(route.params.workout_date, exercise_index, set_index, key, value)
@@ -60,7 +55,6 @@ function Workout({ route, navigation }) {
 
   useEffect(() => {
     let workout_data = route.params.current_workout
-    console.log("render use effect")
     if (workout_data) {
       loadWorkout(workout_data)
     } else {
@@ -68,18 +62,34 @@ function Workout({ route, navigation }) {
     }
   }, []);
 
+  const saveNotes = () => {
+    route.params.modifyValue(route.params.workout_date, "none", "none", "notes", notes)
+  }
+
   return (
     <View style={styles.main_view}>
       {filio_bar}
       <View style={styles.date_bar}>
-        <Button color={'gray'} title='  <  ' onPress={() => route.params.changeWorkout(date, -1)}/>
+        {route.params.goLeft ? <Button color={'gray'} title='  <  ' onPress={() => route.params.goLeft(date)}/> 
+                            : <Button color={'gray'} title='     ' />}
         <Text style={styles.date_text}>{date}</Text>
-        <Button color={'gray'} title='  >  ' onPress={() => route.params.changeWorkout(date, 1)}/>
+        {route.params.goRight ? <Button color={'gray'} title='  >  ' onPress={() => route.params.goRight(date)}/> 
+                              : <Button color={'gray'} title='     ' />}
       </View>
-      <View style={{height:20, backgroundColor:'white'}}></View>
+      <View style={{height:10, backgroundColor:'white'}}></View>
       <ScrollView style={styles.scrollview} contentContainerStyle={{flexGrow: 1, width: '100%'}}>
         {exercises}
         <Button title='+ exercise' onPress= {() => addExercise()}/>
+        <View style={{height:10, backgroundColor:'white'}}></View>
+        <TextInput
+          multiline={true}
+          value={notes} 
+          selectionColor={'dodgerblue'}
+          onChangeText={setNotes}
+          onEndEditing={saveNotes}
+          onSubmitEditing={saveNotes}
+          style = {styles.notes_style}
+        />
       </ScrollView>
     </View>    
   );
@@ -115,5 +125,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
     //flex: 1
+  },
+
+  notes_style: {
+    backgroundColor: '#eeeeee',
+    fontSize: 15,
+    textAlign: 'center',
+    height: 150
   }
 });

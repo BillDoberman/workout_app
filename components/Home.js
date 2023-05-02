@@ -7,15 +7,20 @@ import { readDataFromFile, getDataFileName, default_data_library, saveDataLibrar
 function Home({ navigation }) {
 
   const [data_library, setDataLibrary] = useState(null)
-  const [content, setContent] = useState(null)
   const [exercise_options, setExercises] = useState(null)
   const [current_workout, setCurrentWorkout] = useState(null)
   const [workout_date, setWorkoutDate] = useState(null)
   
+  const go_left = (workout_date) => {
+    loadDifferentWorkout(workout_date, -1)
+  }
+
+  const go_right = (workout_date) => {
+    loadDifferentWorkout(workout_date, 1)
+  }
+
   const loadDifferentWorkout = (workout_date, index_change) => {
-    console.log(index_change)
     let workout_dates = Object.keys(data_library["workouts"])
-    console.log(workout_dates)
     let index = workout_dates.indexOf(workout_date)
     let new_index = Math.min(workout_dates.length - 1, Math.max(0, (index + index_change)))
     let new_date = workout_dates[new_index]
@@ -23,13 +28,13 @@ function Home({ navigation }) {
     if (index == new_index) {
       console.log("reached end of workouts. not moving.")
     } else {
-      console.log("navigating now", new_date, exercise_options)
       navigation.replace('Workout', 
           {exercise_options: exercise_options, 
            current_workout: workout_to_use, 
            workout_date: new_date, 
            modifyValue : modifyMyValue, 
-           changeWorkout: loadDifferentWorkout
+           goLeft: new_index > 0 ? go_left : null,
+           goRight: new_index < workout_dates.length - 1 ? go_right : null
            })
     }
   }
@@ -58,10 +63,17 @@ function Home({ navigation }) {
     if (data_library["workouts"][workout_date]["exercises"].length <= exercise_index) {
       data_library["workouts"][workout_date]["exercises"].push({"sets" : [], "type": "squat"})
     }
+
+    if (exercise_index == "none") {
+      data_library["workouts"][workout_date][key] = value
+      saveDataLibrary(data_library)
+      return
+    }
   
     if (exercise_index < 0) { // delete exercise
       let index_to_delete = Math.abs(exercise_index) - 1
       data_library["workouts"][workout_date]["exercises"][index_to_delete] = ""
+      saveDataLibrary(data_library)
       return
     }
   
@@ -71,6 +83,7 @@ function Home({ navigation }) {
       return
     }
   
+    // add a new set
     if (data_library["workouts"][workout_date]["exercises"][exercise_index]["sets"].length <= set_index) {
       data_library["workouts"][workout_date]["exercises"][exercise_index]["sets"].push({"weight" : 0, "reps" : 0})
     }
@@ -85,8 +98,6 @@ function Home({ navigation }) {
     saveDataLibrary(data_library)
   }
 
-  navigation.setOptions({modifyValue : modifyMyValue, changeWorkout: loadDifferentWorkout})
-
   return (
     <View>
     {data_library 
@@ -94,12 +105,12 @@ function Home({ navigation }) {
     (<Button
         title="Go to Workout"
         onPress={() => 
-          navigation.navigate('Workout', 
-          {exercise_options, 
-           current_workout, 
-           workout_date, 
-           modifyValue : modifyMyValue, 
-           changeWorkout: loadDifferentWorkout})}
+          navigation.navigate('Workout', {
+            exercise_options, 
+            current_workout, 
+            workout_date, 
+            modifyValue : modifyMyValue, 
+            goLeft: go_left})}
       />) 
     : 
     (<SafeAreaView style = {styles.loading}>
